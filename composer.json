@@ -1,0 +1,25 @@
+{
+  "name": "inchoo/review-plugin",
+  "description": "Review plugin",
+  "version": "v1.0.0",
+  "authors": [
+    {
+      "name": "Inchoo",
+      "role": "Developer"
+    }
+  ],
+  "type": "shopware-platform-plugin",
+  "autoload": {
+    "psr-4": {
+      "Inchoo\\ReviewPlugin\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Inchoo\\ReviewPlugin\\ReviewPlugin",
+    "copyright": "(c) by Inchoo",
+    "label": {
+      "de-DE": "Rezension plugin",
+      "en-GB": "Review plugin"
+    }
+  }
+}

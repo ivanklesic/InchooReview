@@ -1,0 +1,14 @@
+{
+  "account": {
+    "reviewButton": "Mein Rezension"
+  },
+  "review": {
+    "formTitle": "Rezension Titel",
+    "formTitlePlaceholder": "Geben Sie hier den Titel ein",
+    "formText": "Rezension Text",
+    "formTextPlaceholder": "Geben Sie hier den Text ein",
+    "formRating": "Rezension Bewertung",
+    "formRatingPlaceholder": "Geben Sie hier den Bewertung ein (1-10)",
+    "submit": "Einreichen"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "account": {
+    "reviewButton": "My review"
+  },
+  "review": {
+    "formTitle": "Review title",
+    "formTitlePlaceholder": "Enter title here",
+    "formText": "Review text",
+    "formTextPlaceholder": "Enter text here",
+    "formRating": "Review rating",
+    "formRatingPlaceholder": "Enter rating here (1-10)",
+    "submit": "Submit"
+  }
+}

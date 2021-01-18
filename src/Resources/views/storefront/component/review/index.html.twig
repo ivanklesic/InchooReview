@@ -1,0 +1,98 @@
+{% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
+
+{% block page_account_main_content %}
+    <form class="login-form"
+          action="{{ path('frontend.review.create') }}"
+          method="post"
+          data-form-csrf-handler="true"
+          data-form-validation="true">
+
+        {% block component_review_form_csrf %}
+            {{ sw_csrf('frontend.review.create') }}
+        {% endblock %}
+
+
+        {% block component_review_form_fields %}
+            <div class="form-row">
+                {% block component_review_form_title %}
+                    <div class="form-group col-md-12">
+                        {% block component_review_form_title_label %}
+                            <label class="form-label"
+                                   for="title">
+                                {{ "review.formTitle"|trans|sw_sanitize }}
+                            </label>
+                        {% endblock %}
+
+                        {% block component_review_form_title_input %}
+                            <input type="text"
+                                   id="title"
+                                   placeholder="{{ "review.formTitlePlaceholder"|trans|striptags }}"
+                                   name="title"
+                                   required="required"
+                                   value="{{ page.review.title ?? "" }}"
+                            >
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+
+                {% block component_review_form_rating %}
+                    <div class="form-group col-md-12">
+                        {% block component_review_form_rating_label %}
+                            <label class="form-label"
+                                   for="rating">
+                                {{ "review.formRating"|trans|sw_sanitize }}
+                            </label>
+                        {% endblock %}
+
+                        {% block component_review_form_rating_input %}
+                            <input type="number"
+                                   min="1"
+                                   max="10"
+                                   id="rating"
+                                   placeholder="{{ "review.formRatingPlaceholder"|trans|striptags }}"
+                                   name="rating"
+                                   required="required"
+                                   value="{{ page.review.rating ?? null }}"
+                                   style="width: 30%"
+                            >
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+
+                {% block component_review_form_text %}
+                    <div class="form-group col-md-12">
+                        {% block component_review_form_reviewText_label %}
+                            <label class="form-label"
+                                   for="reviewText">
+                                {{ "review.formText"|trans|sw_sanitize }}
+                            </label>
+                        {% endblock %}
+
+                        {% block component_review_form_reviewText_input %}
+                            <textarea
+                                      id="reviewText"
+                                      placeholder="{{ "review.formTextPlaceholder"|trans|striptags }}"
+                                      name="reviewText"
+                                      required="required"
+                                      rows="15"
+                                      cols="30"
+                            >{{ page.review.reviewText ?? "" }}</textarea>
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+
+
+        {% block component_account_login_submit %}
+            <div class="login-submit">
+                <button type="submit"
+                        class="btn btn-primary">
+                    {{ "review.submit"|trans|sw_sanitize }}
+                </button>
+            </div>
+        {% endblock %}
+    </form>
+{% endblock %}
+

@@ -1,0 +1,11 @@
+{% sw_extends '@Storefront/storefront/page/account/sidebar.html.twig' %}
+
+{% block page_account_sidebar_menu_inner %}
+    {{ parent() }}
+
+    <a href="{{ path('frontend.review.list') }}"
+       title="{{ "account.reviewButton"|trans|striptags }}"
+       class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.review.list') %} is-active{% endif %}">
+        {{ "account.reviewButton"|trans|sw_sanitize }}
+    </a>
+{% endblock %}
