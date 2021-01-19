@@ -1,0 +1,16 @@
+{% block inchoo_review_list %}
+    <sw-page class="inchoo-review-list">
+        <template slot="content">
+            {% block inchoo_review_list_content %}
+                <sw-entity-listing
+                        v-if="reviews"
+                        :items="reviews"
+                        :repository="repository"
+                        :showSelection="false"
+                        :columns="columns"
+                        detailRoute="inchoo.review.detail">
+                </sw-entity-listing>
+            {% endblock %}
+        </template>
+    </sw-page>
+{% endblock %}

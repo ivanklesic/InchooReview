@@ -3,6 +3,17 @@
     "general": {
       "mainMenuItemGeneral": "Review",
       "descriptionTextModule": "Manage reviews here"
+    },
+    "list": {
+      "columnTitle": "Title",
+      "columnText": "Review text",
+      "columnRating": "Rating",
+      "columnCustomer": "Customer",
+      "columnDisplay": "Display"
+    },
+    "detail": {
+      "cancelButtonText": "Cancel",
+      "saveButtonText": "Save"
     }
   }
 }

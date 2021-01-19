@@ -1,0 +1,27 @@
+<sw-page class="inchoo-review-detail">
+    <template slot="content">
+        <sw-card-view>
+            <sw-card v-if="review">
+                <sw-field :label="$t('inchoo-review.list.columnTitle')" v-model="review.title" validation="required"></sw-field>
+                <sw-field :label="$t('inchoo-review.list.columnText')" v-model="review.reviewText" validation="required"></sw-field>
+                <sw-field :label="$t('inchoo-review.list.columnRating')" v-model="review.rating" type="number" validation="required"></sw-field>
+            </sw-card>
+        </sw-card-view>
+    </template>
+
+    <template slot="smart-bar-actions">
+        {# Smart bar buttons here #}
+        <sw-button :routerLink="{ name: 'inchoo.review.list' }">
+            {{ $t('inchoo-review.detail.cancelButtonText') }}
+        </sw-button>
+
+        <sw-button-process
+                :isLoading="isLoading"
+                :processSuccess="processSuccess"
+                variant="primary"
+                @process-finish="saveFinish"
+                @click="onClickSave">
+            {{ $t('inchoo-review.detail.saveButtonText') }}
+        </sw-button-process>
+    </template>
+</sw-page>

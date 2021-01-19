@@ -1,8 +1,9 @@
 import deDE from './snippet/de-DE.json';
 import enGB from './snippet/en-GB.json';
-import './page/swag-bundle-list';
+import './page/inchoo-review-list';
+import './page/inchoo-review-detail';
 
-Shopware.Module.register('inchoo_review', {
+Shopware.Module.register('inchoo-review', {
     // configuration here
     color: '#ff3d58',
     icon: 'default-shopping-paper-bag-product',
@@ -20,14 +21,14 @@ Shopware.Module.register('inchoo_review', {
             path: 'list'
         },
         detail: {
-            component: 'inchoo-review-details',
+            component: 'inchoo-review-detail',
             path: 'detail/:id',
             meta: {
                 parentPath: 'inchoo.review.list'
             }
         },
         delete: {
-            component: 'swag-bundle-delete',
+            component: 'inchoo-review-delete',
             path: 'delete',
             meta: {
                 parentPath: 'inchoo.review.list'
