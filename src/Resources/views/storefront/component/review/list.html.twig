@@ -1,1 +1,15 @@
 {% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
+
+{% block page_account_main_content %}
+    {% for review in page.reviews %}
+        <div class="row">
+            <div class="card review">
+                <h3>{{ review.title }}</h3>
+                Rating: {{ review.rating }} / 10
+                <div class="card-body">
+                    <small>{{ review.reviewText }}</small>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

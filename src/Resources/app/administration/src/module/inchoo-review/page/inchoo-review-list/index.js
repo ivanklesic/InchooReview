@@ -18,8 +18,13 @@ Shopware.Component.register('inchoo-review-list', {
     },
     created() {
         // add code to fill the variable 'reviews'
+        const criteria = new Criteria();
+        criteria.addAssociation('customer');
+        criteria.addSorting(
+            Criteria.sort('createdAt', 'DESC')
+        );
         this.repository = this.repositoryFactory.create('inchoo_review');
-        this.repository.search((new Criteria()).addAssociation('customer'), Shopware.Context.api)
+        this.repository.search(criteria, Shopware.Context.api)
             .then((result) => {
                 this.reviews = result;
                 this.reviews.forEach(review => {
@@ -32,14 +37,23 @@ Shopware.Component.register('inchoo-review-list', {
     ],
     computed: {
         columns() {
-            return [{
+            return [
+            {
+                property: 'createdAt',
+                dataIndex: 'createdAt',
+                label: this.$tc('inchoo-review.list.columnCreatedAt'),
+                allowResize: true,
+                primary: true
+            },
+            {
                 property: 'title',
                 dataIndex: 'title',
                 label: this.$tc('inchoo-review.list.columnTitle'),
                 routerLink: 'inchoo.review.detail',
                 inlineEdit: 'string',
                 allowResize: true,
-                primary: true
+                primary: true,
+
             },
             {
                 property: 'reviewText',

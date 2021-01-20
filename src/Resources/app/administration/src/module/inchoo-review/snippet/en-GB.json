@@ -9,7 +9,8 @@
       "columnText": "Review text",
       "columnRating": "Rating",
       "columnCustomer": "Customer",
-      "columnDisplay": "Display"
+      "columnDisplay": "Display",
+      "columnCreatedAt": "Created at"
     },
     "detail": {
       "cancelButtonText": "Cancel",

@@ -12,9 +12,14 @@
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
             <argument type="service" id="inchoo_review.repository"/>
         </service>
+        <service id="Inchoo\ReviewPlugin\Page\Review\ReviewsPageLoader">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
+            <argument type="service" id="inchoo_review.repository"/>
+        </service>
         <service id="Inchoo\ReviewPlugin\Storefront\Controller\ReviewController">
             <tag name="controller.service_arguments" />
             <argument type="service" id="Inchoo\ReviewPlugin\Page\Review\ReviewPageLoader"/>
+            <argument type="service" id="Inchoo\ReviewPlugin\Page\Review\ReviewsPageLoader"/>
             <argument type="service" id="inchoo_review.repository"/>
         </service>
     </services>

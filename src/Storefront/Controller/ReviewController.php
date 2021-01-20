@@ -3,6 +3,7 @@
 namespace Inchoo\ReviewPlugin\Storefront\Controller;
 
 use Inchoo\ReviewPlugin\Page\Review\ReviewPageLoader;
+use Inchoo\ReviewPlugin\Page\Review\ReviewsPageLoader;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\Routing\Annotation\LoginRequired;
@@ -22,24 +23,27 @@ class ReviewController extends StorefrontController
 
     private $reviewPageLoader;
 
+    private $reviewsPageLoader;
+
     /**
      * @var EntityRepositoryInterface
      */
     private $reviewRepository;
 
-    public function __construct(ReviewPageLoader $reviewPageLoader, EntityRepositoryInterface $entityRepository)
+    public function __construct(ReviewPageLoader $reviewPageLoader, ReviewsPageLoader $reviewsPageLoader, EntityRepositoryInterface $entityRepository)
     {
         $this->reviewPageLoader = $reviewPageLoader;
+        $this->reviewsPageLoader = $reviewsPageLoader;
         $this->reviewRepository = $entityRepository;
     }
 
     /**
-     * @Route("/review/list", name="frontend.review.list", methods={"GET"})
+     * @Route("/review/index", name="frontend.review.index", methods={"GET"})
      * @param Request $request
      * @param SalesChannelContext $context
      * @return Response
      */
-    public function listAction(Request $request, SalesChannelContext $context): Response
+    public function indexAction(Request $request, SalesChannelContext $context): Response
     {
         $page = $this->reviewPageLoader->load($request, $context);
 
@@ -68,7 +72,6 @@ class ReviewController extends StorefrontController
 
         $page = $this->reviewPageLoader->load($request, $context);
 
-//        dd($request);
         $data = [
             'title' => $request->get('title'),
             'reviewText' => $request->get('reviewText'),
@@ -80,7 +83,6 @@ class ReviewController extends StorefrontController
             ]
         ;
 
-//        dd($page);
         if($review = $page->getReview())
         {
             $data['id'] = $review->getId();
@@ -92,7 +94,27 @@ class ReviewController extends StorefrontController
             $context->getContext()
         );
 
-        return $this->forwardToRoute('frontend.review.list');
+        return $this->forwardToRoute('frontend.review.index');
+    }
+
+    /**
+     * @Route("/reviews", name="frontend.review.list", methods={"GET"})
+     * @param Request $request
+     * @param SalesChannelContext $context
+     * @return Response
+     */
+    public function listAction(Request $request, SalesChannelContext $context): Response
+    {
+        $page = $this->reviewsPageLoader->load($request, $context);
+
+        if(!$context->getCustomer())
+        {
+            return $this->redirectToRoute('frontend.account.login');
+        }
+
+        return $this->renderStorefront('@Inchoo/storefront/component/review/list.html.twig', [
+            'page' => $page,
+        ]);
     }
 
 }
