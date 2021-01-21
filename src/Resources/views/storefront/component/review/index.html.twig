@@ -1,5 +1,6 @@
 {% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
 
+
 {% block page_account_main_content %}
     <form class="login-form"
           action="{{ path('frontend.review.create') }}"
@@ -11,7 +12,6 @@
             {{ sw_csrf('frontend.review.create') }}
         {% endblock %}
 
-
         {% block component_review_form_fields %}
             <div class="form-row">
                 {% block component_review_form_title %}
@@ -21,6 +21,14 @@
                                    for="title">
                                 {{ "review.formTitle"|trans|sw_sanitize }}
                             </label>
+                        {% endblock %}
+
+                        {% block component_review_form_title_error %}
+                            {% if errors.title %}
+                                <br>
+                                    <small style="color:red">{{ errors.title }}</small>
+                                <br>
+                            {% endif %}
                         {% endblock %}
 
                         {% block component_review_form_title_input %}
@@ -42,6 +50,14 @@
                                    for="rating">
                                 {{ "review.formRating"|trans|sw_sanitize }}
                             </label>
+                        {% endblock %}
+
+                        {% block component_review_form_rating_error %}
+                            {% if errors.rating %}
+                                <br>
+                                <small style="color:red">{{ errors.rating }}</small>
+                                <br>
+                            {% endif %}
                         {% endblock %}
 
                         {% block component_review_form_rating_input %}
@@ -68,6 +84,14 @@
                             </label>
                         {% endblock %}
 
+                        {% block component_review_form_reviewText_error %}
+                            {% if errors.reviewText %}
+                                <br>
+                                <small style="color:red">{{ errors.reviewText }}</small>
+                                <br>
+                            {% endif %}
+                        {% endblock %}
+
                         {% block component_review_form_reviewText_input %}
                             <textarea
                                       id="reviewText"
@@ -83,9 +107,7 @@
             </div>
         {% endblock %}
 
-
-
-        {% block component_account_login_submit %}
+        {% block component_review_form_submit %}
             <div class="login-submit">
                 <button type="submit"
                         class="btn btn-primary">
@@ -94,5 +116,36 @@
             </div>
         {% endblock %}
     </form>
+    {% if page.review %}
+        <br>
+        <form class="login-form"
+              action="{{ path('frontend.review.delete') }}"
+              method="post"
+              data-form-csrf-handler="true"
+              data-form-validation="false">
+
+                {% block component_review_delete_csrf %}
+                        {{ sw_csrf('frontend.review.delete') }}
+                {% endblock %}
+
+                    {% block component_review_delete_hidden_input %}
+                            <input type="hidden"
+                                   id="reviewId"
+                                   name="reviewId"
+                                   required="required"
+                                   value="{{ page.review.id }}"
+                            >
+                    {% endblock %}
+
+                {% block component_review_delete_submit %}
+                        <div class="login-submit">
+                                <button type="submit"
+                                        class="btn btn-danger">
+                                        {{ "review.delete"|trans|sw_sanitize }}
+                                </button>
+                        </div>
+                {% endblock %}
+        </form>
+    {% endif %}
 {% endblock %}
 

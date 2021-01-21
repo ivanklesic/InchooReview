@@ -2,13 +2,14 @@
 
 namespace Inchoo\ReviewPlugin\Storefront\Controller;
 
+use Inchoo\ReviewPlugin\Core\Content\Review\ReviewEntity;
 use Inchoo\ReviewPlugin\Page\Review\ReviewPageLoader;
 use Inchoo\ReviewPlugin\Page\Review\ReviewsPageLoader;
-use Shopware\Core\Framework\Context;
+use Inchoo\ReviewPlugin\Storefront\Validator\ReviewValidator;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\Framework\Routing\Annotation\LoginRequired;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
-use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,16 +26,24 @@ class ReviewController extends StorefrontController
 
     private $reviewsPageLoader;
 
+    private $reviewValidator;
+
     /**
      * @var EntityRepositoryInterface
      */
     private $reviewRepository;
 
-    public function __construct(ReviewPageLoader $reviewPageLoader, ReviewsPageLoader $reviewsPageLoader, EntityRepositoryInterface $entityRepository)
+    public function __construct(
+        ReviewPageLoader $reviewPageLoader,
+        ReviewsPageLoader $reviewsPageLoader,
+        EntityRepositoryInterface $entityRepository,
+        ReviewValidator $reviewValidator
+    )
     {
         $this->reviewPageLoader = $reviewPageLoader;
         $this->reviewsPageLoader = $reviewsPageLoader;
         $this->reviewRepository = $entityRepository;
+        $this->reviewValidator = $reviewValidator;
     }
 
     /**
@@ -54,6 +63,7 @@ class ReviewController extends StorefrontController
 
         return $this->renderStorefront('@Inchoo/storefront/component/review/index.html.twig', [
             'page' => $page,
+            'errors' => $request->get('errors')
         ]);
     }
 
@@ -73,15 +83,21 @@ class ReviewController extends StorefrontController
         $page = $this->reviewPageLoader->load($request, $context);
 
         $data = [
-            'title' => $request->get('title'),
-            'reviewText' => $request->get('reviewText'),
+            'title' => trim($request->get('title')),
+            'reviewText' => trim($request->get('reviewText')),
             'rating' => (int)$request->get('rating'),
             'customerId' => $context->getCustomer()->getId(),
             'languageId' => $context->getContext()->getLanguageId(),
             'salesChannelId' => $context->getSalesChannel()->getId(),
             'display' => false
-            ]
-        ;
+            ];
+
+        $errors = $this->reviewValidator->validate($data);
+
+        if(!empty($errors))
+        {
+            return $this->redirectToRoute('frontend.review.index', ['errors' => $errors]);
+        }
 
         if($review = $page->getReview())
         {
@@ -94,7 +110,7 @@ class ReviewController extends StorefrontController
             $context->getContext()
         );
 
-        return $this->forwardToRoute('frontend.review.index');
+        return $this->redirectToRoute('frontend.review.index');
     }
 
     /**
@@ -117,4 +133,53 @@ class ReviewController extends StorefrontController
         ]);
     }
 
+    /**
+     * @Route("/review/delete", name="frontend.review.delete", methods={"POST"})
+     * @param Request $request
+     * @param SalesChannelContext $context
+     * @return Response
+     */
+    public function deleteAction(Request $request, SalesChannelContext $context): Response
+    {
+        if(!$context->getCustomer())
+        {
+            return $this->redirectToRoute('frontend.account.login');
+        }
+
+        if(!$reviewId = $request->request->get('reviewId'))
+        {
+            return $this->redirectToRoute('frontend.review.index');
+        }
+
+        $criteria = new Criteria();
+
+        $criteria->addFilter(
+            new EqualsFilter('id', $reviewId)
+        );
+
+        /** @var ReviewEntity $review */
+        $review = $this->reviewRepository->search(
+            $criteria, $context->getContext()
+        )->getEntities()->first();
+
+        if(!$review)
+        {
+            return $this->redirectToRoute('frontend.review.index');
+        }
+
+        if($review->getCustomerId() !== $context->getCustomer()->getId())
+        {
+            return $this->redirectToRoute('frontend.review.index');
+        }
+
+        $this->reviewRepository->delete(
+            [
+                [
+                    'id' => $reviewId
+                ]
+            ]
+        , $context->getContext());
+
+        return $this->redirectToRoute('frontend.review.index');
+    }
 }

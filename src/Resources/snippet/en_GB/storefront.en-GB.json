@@ -9,6 +9,7 @@
     "formTextPlaceholder": "Enter text here",
     "formRating": "Review rating",
     "formRatingPlaceholder": "Enter rating here (1-10)",
-    "submit": "Submit"
+    "submit": "Submit",
+    "delete": "Delete"
   }
 }

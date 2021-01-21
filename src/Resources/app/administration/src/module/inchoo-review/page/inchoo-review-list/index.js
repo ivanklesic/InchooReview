@@ -27,9 +27,7 @@ Shopware.Component.register('inchoo-review-list', {
         this.repository.search(criteria, Shopware.Context.api)
             .then((result) => {
                 this.reviews = result;
-                this.reviews.forEach(review => {
-                    review.customer.fullName = review.customer.firstName + ' ' + review.customer.lastName;
-                });
+                this.setCustomerFullName();
             });
     },
     inject: [
@@ -88,5 +86,11 @@ Shopware.Component.register('inchoo-review-list', {
             },
             ];
         },
+        setCustomerFullName()
+        {
+            this.reviews.forEach(review => {
+                review.customer.fullName = review.customer.firstName + ' ' + review.customer.lastName;
+            });
+        }
     },
 });

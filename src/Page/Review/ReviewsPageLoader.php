@@ -6,6 +6,7 @@ use Inchoo\ReviewPlugin\Core\Content\Review\ReviewCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Page\GenericPageLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,6 +61,10 @@ class ReviewsPageLoader
                 new EqualsFilter('languageId', $salesChannelContext->getContext()->getLanguageId())
             )->addFilter(
                 new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId())
+            );
+
+            $criteria->addSorting(
+                new FieldSorting('createdAt', 'DESC')
             );
 
             /** @var ReviewCollection $reviews */
